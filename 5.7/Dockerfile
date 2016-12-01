@@ -6,5 +6,6 @@ ENV REPLICATION_PASSWORD replication_pass
 COPY core/replication-entrypoint.sh /usr/local/bin/
 COPY core/init-slave.sh /
 
-ENTRYPOINT ["replication-entrypoint.sh"]
+RUN chmod +x /usr/local/bin/replication-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/replication-entrypoint.sh"]
 CMD ["mysqld"]
