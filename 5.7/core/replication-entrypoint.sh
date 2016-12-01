@@ -26,7 +26,7 @@ if [ -z "$MASTER_HOST" ]; then
 #!/bin/bash
 
 echo Creating replication user ...
-mysql -u root -e "\
+mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "\
   GRANT \
     FILE, \
     SELECT, \
