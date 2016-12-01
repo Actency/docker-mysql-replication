@@ -3,14 +3,14 @@
 # * replicate-do-db=db_name only if we want to store and replicate certain DBs
 # * replicate-ignore-db=db_name used when we don't want to replicate certain DBs
 # * replicate_wild_do_table used to replicate tables based on wildcard patterns
-# * replicate_wild_ignore_table used to ignore tables in replication based on wildcard patterns 
+# * replicate_wild_ignore_table used to ignore tables in replication based on wildcard patterns
 
 REPLICATION_HEALTH_GRACE_PERIOD=${REPLICATION_HEALTH_GRACE_PERIOD:-3}
 REPLICATION_HEALTH_TIMEOUT=${REPLICATION_HEALTH_TIMEOUT:-10}
 
 check_slave_health () {
   echo Checking replication health:
-  status=$(mysql -u root -e "SHOW SLAVE STATUS\G")
+  status=$(mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "SHOW SLAVE STATUS\G")
   echo "$status" | egrep 'Slave_(IO|SQL)_Running:|Seconds_Behind_Master:|Last_.*_Error:' | grep -v "Error: $"
   if ! echo "$status" | grep -qs "Slave_IO_Running: Yes"    ||
      ! echo "$status" | grep -qs "Slave_SQL_Running: Yes"   ||
@@ -24,7 +24,7 @@ check_slave_health () {
 
 echo Updating master connetion info in slave.
 
-mysql -u root -e "RESET MASTER; \
+mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "RESET MASTER; \
   CHANGE MASTER TO \
   MASTER_HOST='$MASTER_HOST', \
   MASTER_PORT=$MASTER_PORT, \
@@ -43,12 +43,12 @@ mysqldump \
   --master-data \
   --flush-logs \
   --flush-privileges \
-  | mysql -u root
+  | mysql -uroot -p$MYSQL_ROOT_PASSWORD
 
 echo mysqldump completed.
 
 echo Starting slave ...
-mysql -u root -e "START SLAVE;"
+mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "START SLAVE;"
 
 echo Initial health check:
 check_slave_health
@@ -66,4 +66,3 @@ while ! check_slave_health; do
   let counter=counter+1
   sleep 1
 done
-
