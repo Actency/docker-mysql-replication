@@ -1,4 +1,4 @@
-# Docker image for MySQL replication support.
+# Docker image for MySQL master-slave replication
 
 ## Additional environment variables:
 * REPLICATION_USER [default: replication]
