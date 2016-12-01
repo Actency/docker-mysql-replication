@@ -7,6 +7,11 @@ log-bin=mysql-bin
 relay-log=mysql-relay
 #bind-address=0.0.0.0
 #skip-name-resolve
+innodb_file_per_table = 1
+innodb_flush_method = O_DIRECT
+innodb-flush-log-at-trx-commit = 0
+transaction-isolation = READ-COMMITTED
+max_allowed_packet = 128M
 EOF
 
 # If there is a linked master use linked container information
@@ -55,4 +60,3 @@ server-id=$SERVER_ID
 EOF
 
 exec docker-entrypoint.sh "$@"
-
