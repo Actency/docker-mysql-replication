@@ -1,5 +1,6 @@
 FROM mysql:5.7
 
+# default replication user and pass
 ENV REPLICATION_USER replication
 ENV REPLICATION_PASSWORD replication_pass
 
