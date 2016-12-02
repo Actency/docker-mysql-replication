@@ -12,17 +12,26 @@
 
 ```
 docker run -d \
-  --name mysql_master \
-  -e MYSQL_ALLOW_EMPTY_PASSWORD=1 \
-  actency/docker-mysql-replication:5.7
+ --name mysql_master \
+ -v /data/mastermysql:/var/lib/mysql \
+ -e MYSQL_ROOT_PASSWORD=mysqlroot \
+ -e MYSQL_USER=example_user \
+ -e MYSQL_PASSWORD=mysqlpwd \
+ -e MYSQL_DATABASE=example \
+ actency/docker-mysql-replication:5.7
+
 ```
 
 ## Start slave
 
 ```
 docker run -d \
-  --name mysql_slave \
-  -e MYSQL_ALLOW_EMPTY_PASSWORD=1 \
-  --link mysql_master:master \
-  actency/docker-mysql-replication:5.7
+ --name mysql_slave \
+ -v /data/slavemysql:/var/lib/mysql \
+ -e MYSQL_ROOT_PASSWORD=mysqlroot \
+ -e MYSQL_USER=example_user \
+ -e MYSQL_PASSWORD=mysqlpwd \
+ -e MYSQL_DATABASE=example \
+ --link mysql_master:master \
+ actency/docker-mysql-replication:5.7
 ```
