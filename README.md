@@ -39,3 +39,9 @@ docker run -d \
  --link mysql_master:master \
  actency/docker-mysql-replication:5.7
 ```
+
+## Check replication status
+
+```
+docker exec -it mysql_slave mysql -uroot -pmysqlroot -e "SHOW SLAVE STATUS\G;"
+```
