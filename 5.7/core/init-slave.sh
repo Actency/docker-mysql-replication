@@ -15,7 +15,7 @@ check_slave_health () {
   if ! echo "$status" | grep -qs "Slave_IO_Running: Yes"    ||
      ! echo "$status" | grep -qs "Slave_SQL_Running: Yes"   ||
      ! echo "$status" | grep -qs "Seconds_Behind_Master: 0" ; then
-	echo WARNING: Replication is not healthy.
+  echo WARNING: Replication is not healthy.
     return 1
   fi
   return 0
@@ -34,7 +34,7 @@ done
 echo "MySQL Master ($MASTER_HOST) is available!"
 
 
-echo Updating master connetion info in slave.
+echo Updating master connection info in slave.
 
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "RESET MASTER; \
   CHANGE MASTER TO \
@@ -65,14 +65,14 @@ mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "START SLAVE;"
 echo Initial health check:
 check_slave_health
 
-echo Waiting for health grace period and slave to be still healthy:
+echo "Waiting for health grace period ($REPLICATION_HEALTH_GRACE_PERIOD seconds) and slave to be still healthy:"
 sleep $REPLICATION_HEALTH_GRACE_PERIOD
 
 counter=0
 while ! check_slave_health; do
   if (( counter >= $REPLICATION_HEALTH_TIMEOUT )); then
-    echo ERROR: Replication not healthy, health timeout reached, failing.
-	break
+    echo "ERROR: Replication not healthy, health timeout of $REPLICATION_HEALTH_TIMEOUT seconds reached, failing."
+  break
     exit 1
   fi
   let counter=counter+1
