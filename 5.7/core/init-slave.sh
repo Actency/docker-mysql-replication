@@ -27,9 +27,11 @@ until mysqladmin ping \
   --protocol=TCP \
   --connect-timeout 3 --silent ;
 do
-  echo "MySQL Master is unavailable - sleeping"
+  echo "MySQL Master ($MASTER_HOST) is unavailable - sleeping"
   sleep 1
 done
+
+echo "MySQL Master ($MASTER_HOST) is available!"
 
 
 echo Updating master connetion info in slave.
