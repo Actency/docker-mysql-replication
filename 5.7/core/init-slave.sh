@@ -21,6 +21,16 @@ check_slave_health () {
   return 0
 }
 
+until mysqladmin ping \
+  -h "$MASTER_HOST" \
+  --port=$MASTER_PORT \
+  --protocol=TCP \
+  --connect-timeout 3 --silent ;
+do
+  echo "MySQL Master is unavailable - sleeping"
+  sleep 1
+done
+
 
 echo Updating master connetion info in slave.
 
