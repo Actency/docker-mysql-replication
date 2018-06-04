@@ -34,6 +34,11 @@ done
 echo "MySQL Master ($MASTER_HOST) is available!"
 
 
+if [[ -n "${REPLICATION_START_DELAY}" ]] ; then
+  echo "Waiting $REPLICATION_START_DELAY s before starting replication"
+  sleep $REPLICATION_START_DELAY
+fi
+
 echo Updating master connection info in slave.
 
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "RESET MASTER; \
