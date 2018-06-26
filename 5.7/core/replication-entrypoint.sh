@@ -42,8 +42,9 @@ mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "\
 "
 EOF
 else
-  # TODO: make server-id discoverable
-  export SERVER_ID=2
+  if [ -z "$SERVER_ID" ]; then
+    export SERVER_ID=2
+  fi
   cp -v /init-slave.sh /docker-entrypoint-initdb.d/
   cat > /etc/mysql/mysql.conf.d/repl-slave.cnf << EOF
 [mysqld]
