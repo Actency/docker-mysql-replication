@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eo pipefail
 
+# default master port
+export MASTER_PORT=3306
+
+
 cat > /etc/mysql/mysql.conf.d/repl.cnf << EOF
 [mysqld]
 log-bin=mysql-bin
@@ -42,6 +46,16 @@ mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "\
 "
 EOF
 else
+  max=25
+  until mysql -h"$MASTER_HOST" -P"$MASTER_PORT" -uroot -p"$MYSQL_ROOT_PASSWORD" &> /dev/null; do
+    echo "Waiting for ${MASTER_HOST}:${MASTER_PORT} ..."
+    sleep 1;
+    ((max=max-1))
+    if [ $max == 0 ]]; then
+      echo "Giving up, master is not coming on on ${MASTER_HOST}:${MASTER_PORT}!!!"
+      exit 2;
+    fi
+  done
   # TODO: make server-id discoverable
   export SERVER_ID=2
   cp -v /init-slave.sh /docker-entrypoint-initdb.d/

@@ -24,6 +24,8 @@ check_slave_health () {
 
 echo Updating master connetion info in slave.
 
+echo "MASTER=${MASTER_HOST}:${MASTER_PORT}"
+
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "RESET MASTER; \
   CHANGE MASTER TO \
   MASTER_HOST='$MASTER_HOST', \

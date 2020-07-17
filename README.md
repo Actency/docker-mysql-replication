@@ -40,6 +40,16 @@ docker run -d \
  actency/docker-mysql-replication:5.7
 ```
 
+
+## Docker compose
+Bring up master and slave
+```
+cd compose
+docker-compose up -d
+```
+Database files will be in `compose/data` directory.
+On linux machines, the files may be owned by the root user
+
 ## Check replication status
 
 ```

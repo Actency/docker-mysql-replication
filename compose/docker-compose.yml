@@ -1,30 +1,26 @@
 version: '3'
 services:
   mysql_master:
-    image: actency/docker-mysql-replication:5.7
+    image: bosyotech/docker-mysql-replication:5.7
     container_name: "mysql_master"
     environment: 
       - MYSQL_ROOT_PASSWORD=111
       - MYSQL_USER=mswipe
       - MYSQL_PASSWORD="mswipe@sandbox"
       - MYSQL_DATABASE=example
-      - REPLICATION_USER=replication_user
-      - REPLICATION_PASSWORD=myreplpassword
     ports:
       - 3306:3306
     volumes:
       - ./data/master:/var/lib/mysql
 
   mysql_slave:
-    image: actency/docker-mysql-replication:5.7
+    image: bosyotech/docker-mysql-replication:5.7
     container_name: "mysql_slave"
     environment: 
       - MYSQL_ROOT_PASSWORD=111
       - MYSQL_USER=mswipe
       - MYSQL_PASSWORD="mswipe@sandbox"
       - MYSQL_DATABASE=example
-      - REPLICATION_USER=replication_user
-      - REPLICATION_PASSWORD=myreplpassword
       - MASTER_HOST=mysql_master
     ports:
       - 5506:3306
